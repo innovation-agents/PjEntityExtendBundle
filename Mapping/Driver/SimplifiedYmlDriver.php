@@ -17,7 +17,7 @@ class SimplifiedYmlDriver extends DoctrineSimplifiedYamlDriver
     /**
      * {@inheritDoc}
      */
-    public function getAllClassNames()
+    public function getAllClassNames(): array
     {
         $classNames = parent::getAllClassNames();
 
@@ -40,7 +40,7 @@ class SimplifiedYmlDriver extends DoctrineSimplifiedYamlDriver
      *
      * @return boolean
      */
-    public function isTransient($className)
+    public function isTransient($className): bool
     {
         $isTransient = parent::isTransient($className);
 

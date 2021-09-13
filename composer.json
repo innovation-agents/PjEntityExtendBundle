@@ -3,22 +3,23 @@
   "type": "symfony-bundle",
   "description": "Easy doctrine entities extending",
   "keywords": ["doctrine extend mapping"],
-  "homepage": "https://github.com/pjarmalavicius/PjEntityExtendBundle",
+  "homepage": "https://github.com/innovation-agents/PjEntityExtendBundle",
   "license": "MIT",
   "authors": [
+    {
+      "name": "Andreas Keßler",
+      "email": "andreas@innovation-agents.de"
+    },
     {
       "name": "Paulius Jarmalavičius",
       "email": "paulius.jarmalavicius@gmail.com"
     }
   ],
   "require": {
-    "php": "~5.4",
-    "symfony/framework-bundle": "~2.3|~3.0",
+    "php": "^8.0.0",
+    "symfony/framework-bundle": "^5.0",
     "doctrine/orm": ">=2.2.3",
     "doctrine/doctrine-bundle": "*"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "~4.0"
   },
   "autoload": {
     "psr-4": {

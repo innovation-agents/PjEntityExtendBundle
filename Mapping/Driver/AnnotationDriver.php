@@ -2,54 +2,52 @@
 
 namespace Pj\EntityExtendBundle\Mapping\Driver;
 
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\MappingException;
+use Doctrine\Persistence\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver as DoctrineAnnotationDriver;
 use Pj\EntityExtendBundle\Mapping\Driver\Traits\ExtendedEntitiesTrait;
 use Pj\EntityExtendBundle\Mapping\ExtendedEntity;
+use ReflectionClass;
+use ReflectionException;
 
 /**
  * Class AnnotationDriver.
  *
  * @author Paulius Jarmalavičius <paulius.jarmalavicius@gmail.com>
+ * @author Andreas Keßler <andreas@innovation-agents.de>
  */
 class AnnotationDriver extends DoctrineAnnotationDriver
 {
     use ExtendedEntitiesTrait;
 
-    /**
-     * @var EntityManager
-     */
-    protected $em;
+    protected ?EntityManagerInterface $em = null;
 
-    /**
-     * @param EntityManager $em
-     *
-     * @return $this
-     */
-    public function setEntityManager($em)
+    public function setEntityManager(EntityManagerInterface $entityManager): self
     {
-        $this->em = $em;
+        $this->em = $entityManager;
 
         return $this;
     }
 
     /**
-     * {@inheritDoc}
+     * @param string $className
+     * @param ClassMetadataInfo $metadata
+     * @throws MappingException
+     * @throws \Doctrine\Persistence\Mapping\MappingException
+     * @throws ReflectionException
      */
     public function loadMetadataForClass($className, ClassMetadata $metadata)
     {
-        /* @var $metadata \Doctrine\ORM\Mapping\ClassMetadataInfo */
         parent::loadMetadataForClass($className, $metadata);
 
         $classAnnotations = $this->getClassAnnotations($metadata);
-        if (isset($classAnnotations['Pj\EntityExtendBundle\Mapping\ExtendedEntity'])) {
+        if (isset($classAnnotations[ExtendedEntity::class])) {
             /** @var ExtendedEntity $annotation */
-            $annotation = $classAnnotations['Pj\EntityExtendBundle\Mapping\ExtendedEntity'];
+            $annotation = $classAnnotations[ExtendedEntity::class];
             $extendedEntityClass = $annotation->className;
             $cmf = $this->em->getMetadataFactory();
-            /** @var \Doctrine\ORM\Mapping\ClassMetadataInfo $extendedEntityMetadata */
             $extendedEntityMetadata = $cmf->getMetadataFor($extendedEntityClass);
 
             // Set by parent entity.
@@ -63,12 +61,8 @@ class AnnotationDriver extends DoctrineAnnotationDriver
      *
      * A class is non-transient if it is annotated with an annotation
      * from the {@see AnnotationDriver::entityAnnotationClasses}.
-     *
-     * @param string $className
-     *
-     * @return boolean
      */
-    public function isTransient($className)
+    public function isTransient($className): bool
     {
         $isTransient = parent::isTransient($className);
 
@@ -80,31 +74,21 @@ class AnnotationDriver extends DoctrineAnnotationDriver
     }
 
     /**
-     * Returns class annotations.
-     *
-     * @param ClassMetadataInfo $metadata
-     *
-     * @return array
+     * @throws ReflectionException
      */
-    protected function getClassAnnotations($metadata)
+    protected function getClassAnnotations(ClassMetadataInfo $metadata): array
     {
         $class = $metadata->getReflectionClass();
         if ( !$class) {
             // this happens when running annotation driver in combination with
             // static reflection services. This is not the nicest fix
-            $class = new \ReflectionClass($metadata->name);
+            $class = new ReflectionClass($metadata->name);
         }
 
         return $this->readAnnotations($class);
     }
 
-    /**
-     * Reads class annotations.
-     *
-     * @param \ReflectionClass $class
-     * @return array
-     */
-    protected function readAnnotations(\ReflectionClass $class)
+    protected function readAnnotations(ReflectionClass $class): array
     {
         $classAnnotations = $this->reader->getClassAnnotations($class);
         if ($classAnnotations) {

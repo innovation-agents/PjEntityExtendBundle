@@ -12,7 +12,7 @@ trait ExtendedEntitiesTrait
     /**
      * @var array
      */
-    private $extendedEntities = [];
+    private array $extendedEntities = [];
 
     /**
      * Setter for extendedEntities.
@@ -21,7 +21,7 @@ trait ExtendedEntitiesTrait
      *
      * @return $this
      */
-    public function setExtendedEntities(array $extendedEntities)
+    public function setExtendedEntities(array $extendedEntities): self
     {
         $this->extendedEntities = $extendedEntities;
 

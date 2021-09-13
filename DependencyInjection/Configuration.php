@@ -15,10 +15,10 @@ class Configuration implements ConfigurationInterface
     /**
      * {@inheritdoc}
      */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('pj_entity_extend');
+        $treeBuilder = new TreeBuilder('pj_entity_extend');
+        $rootNode = $treeBuilder->getRootNode();
         $rootNode
             ->children()
                 ->arrayNode('extended_entities')

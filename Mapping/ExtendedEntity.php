@@ -14,8 +14,5 @@ use Doctrine\ORM\Mapping\Annotation;
  */
 final class ExtendedEntity implements Annotation
 {
-    /**
-     * @var string
-     */
-    public $className;
+    public ?string $className = null;
 }

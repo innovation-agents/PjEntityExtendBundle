@@ -18,7 +18,7 @@ class MappingDriversPass implements CompilerPassInterface
      *
      * @param ContainerBuilder $container
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $this->configureAnnotationDriver($container);
         $this->configureYmlDriver($container);
@@ -30,7 +30,7 @@ class MappingDriversPass implements CompilerPassInterface
      *
      * @param ContainerBuilder $container
      */
-    protected function configureAnnotationDriver(ContainerBuilder $container)
+    protected function configureAnnotationDriver(ContainerBuilder $container): void
     {
         $serviceName = 'doctrine.orm.default_annotation_metadata_driver';
         if ($container->hasDefinition($serviceName)) {
@@ -52,7 +52,7 @@ class MappingDriversPass implements CompilerPassInterface
      *
      * @param ContainerBuilder $container
      */
-    protected function configureYmlDriver(ContainerBuilder $container)
+    protected function configureYmlDriver(ContainerBuilder $container): void
     {
         $serviceName = 'doctrine.orm.default_yml_metadata_driver';
         if ($container->hasDefinition($serviceName)) {
@@ -71,7 +71,7 @@ class MappingDriversPass implements CompilerPassInterface
      *
      * @param ContainerBuilder $container
      */
-    protected function configureXmlDriver(ContainerBuilder $container)
+    protected function configureXmlDriver(ContainerBuilder $container): void
     {
         $serviceName = 'doctrine.orm.default_xml_metadata_driver';
         if ($container->hasDefinition($serviceName)) {

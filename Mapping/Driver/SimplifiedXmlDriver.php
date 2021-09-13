@@ -17,7 +17,7 @@ class SimplifiedXmlDriver extends DoctrineSimplifiedXmlDriver
     /**
      * {@inheritDoc}
      */
-    public function getAllClassNames()
+    public function getAllClassNames(): array
     {
         $classNames = parent::getAllClassNames();
 
